@@ -1,0 +1,14 @@
+{
+	"findImage": {
+		"message": "Search image with Yandex"
+	},
+	"name": {
+		"message": "Search image with Yandex"
+	},
+	"short": {
+		"message": "Image search"
+	},
+	"description": {
+		"message": "Search for similar images in Yandex with open source code, without advertising and analytics."
+	}
+}

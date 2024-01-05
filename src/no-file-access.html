@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title id="title"></title>
+    <style>
+      .main {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+        margin: 0 auto;
+        max-width: 730px;
+        padding: 20px 0;
+        font-size: 18px;
+        font-weight: 500;
+      }
+      .img {
+        max-width: 100%;
+        border: 1px solid #ddd;
+      }
+    </style>
+  </head>
+  <body>
+    <main id="ru" class="main" style="display: none">
+      <img src="images/icon_128.png" style="max-width: 48px" />
+      <div>
+        Для поиска по локальным файлам
+        <a class="link" href="#">разрешите доступ расширению</a>
+      </div>
+      <img src="images/no-access-ru.png" class="img" />
+    </main>
+
+    <main id="en" class="main" style="display: none">
+      <img src="images/icon_128.png" style="max-width: 48px" />
+      <div>
+        To search local files
+        <a class="link" href="#">allow extension access</a>
+      </div>
+      <img src="images/no-access-en.png" class="img" />
+    </main>
+
+    <script src="no-file-access.js"></script>
+  </body>
+</html>
