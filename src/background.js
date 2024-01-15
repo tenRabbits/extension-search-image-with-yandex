@@ -5,6 +5,11 @@ chrome.contextMenus.onClicked.addListener(async (info) => {
   if (info.menuItemId !== menuItemId) return;
   let url;
 
+  const [tab] = await chrome.tabs.query({
+    active: true,
+    lastFocusedWindow: true,
+  });
+
   if (info.srcUrl.startsWith("http")) {
     url = getResultUrl(info.srcUrl);
   } else if (info.srcUrl.startsWith("data:image/")) {
@@ -32,30 +37,24 @@ chrome.contextMenus.onClicked.addListener(async (info) => {
       });
     // end of duplicated code
   } else {
-    await new Promise((resolve) =>
-      chrome.tabs.query({ active: true, lastFocusedWindow: true }, ([tab]) =>
-        chrome.scripting
-          .executeScript({
-            target: { tabId: tab.id },
-            func: findImage,
-            args: [info.srcUrl],
-          })
-          .then((v) => v[0]?.result)
-          .then((response) => (url = getResultUrl(response?.url)))
-          .catch((e) => {
-            //console.log(e);
-            if (info.srcUrl.startsWith("file")) {
-              url = chrome.runtime.getURL("no-file-access.html");
-            } else {
-              url = getResultUrl(info.srcUrl);
-            }
-          })
-          .finally(() => resolve()),
-      ),
-    );
+    await chrome.scripting
+      .executeScript({
+        target: { tabId: tab.id },
+        func: findImage,
+        args: [info.srcUrl],
+      })
+      .then((v) => v[0]?.result)
+      .then((response) => (url = getResultUrl(response?.url)))
+      .catch(() => {
+        if (info.srcUrl.startsWith("file")) {
+          url = chrome.runtime.getURL("no-file-access.html");
+        } else {
+          url = getResultUrl(info.srcUrl);
+        }
+      });
   }
 
-  if (url) await chrome.tabs.create({ url });
+  if (url) await chrome.tabs.create({ url, index: tab.index + 1 });
 });
 
 chrome.runtime.onInstalled.addListener(() => {
